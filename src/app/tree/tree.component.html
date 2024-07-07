@@ -1,0 +1,39 @@
+<!-- tree.component.html -->
+<div class="tree-search">
+  <input
+    [(ngModel)]="searchValue"
+    (ngModelChange)="searchNodes()"
+    placeholder="Search..."
+  />
+</div>
+
+<ul class="tree-container">
+  <ng-container
+    *ngTemplateOutlet="treeTemplate; context: { nodes: nodes }"
+  ></ng-container>
+</ul>
+
+<!-- tree.component.html -->
+<ng-template #treeTemplate let-nodes="nodes">
+  <li *ngFor="let node of nodes" class="tree-node" [hidden]="!node.visible">
+    <div class="node-content">
+      <span
+        class="expand-icon"
+        (click)="toggleExpanded(node)"
+        *ngIf="!node.isLeaf"
+      >
+        {{ node.expanded ? "▼" : "▶" }}
+      </span>
+      <input
+        type="checkbox"
+        [checked]="node.selected"
+        (change)="toggleSelected(node)"
+      />
+      <span class="node-title">{{ node.label }}</span>
+    </div>
+    <ul *ngIf="node.expanded && node.children">
+      <ng-container
+        *ngTemplateOutlet="treeTemplate; context: { nodes: node.children }"
+      ></ng-container>
+    </ul></li
+></ng-template>
